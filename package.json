@@ -1,0 +1,20 @@
+{
+  "name": "fr9",
+  "version": "0.1.0",
+  "description": "Low-overhead reactive frontend framework",
+  "main": "fr9.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SergeiMinaev/fr9.git"
+  },
+  "keywords": [],
+  "author": "Sergei Minaev",
+  "license": "BSD 2-Clause License",
+  "bugs": {
+    "url": "https://github.com/SergeiMinaev/fr9/issues"
+  },
+  "homepage": "https://github.com/SergeiMinaev/fr9#readme"
+}
