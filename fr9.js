@@ -160,7 +160,7 @@ class Runner {
 
 	setComponentDefaults(domNode) {
 		domNode.setAttribute(CREATED_ATTR, '1');
-		domNode.style.display = 'contents';
+		//domNode.style.display = 'contents';
 	}
 
 	// TODO: не работает @if='${!!state.refs[fieldSchema.ref.model_name]}',
