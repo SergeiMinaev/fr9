@@ -34,7 +34,9 @@ class Runner {
 		} else {
 			this.rootNode = c.rootNode;
 		}
-		this.tpl = document.getElementById(c.tpl).content.cloneNode(true);
+		const tplEl = document.getElementById(c.tpl);
+		if (!tplEl) { console.error(`Element ${c.tpl} not exists.`); }
+		this.tpl = tplEl.content.cloneNode(true);
 		this.context = {};
 		this.render = () => this._render();
 		window.interpolate = this.interpolate;
