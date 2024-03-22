@@ -21,7 +21,11 @@ function getRoute(c) {
 
 function getComponent(current, compName) {
 	if (current.components && current.components[compName]) return current.components[compName];
-	return current.$parent.findComponent(current.$parent, compName);
+	if (!current.$parent) {
+		console.error(`Unable to get component ${compName}. Did you forgot to register it?`);
+		return;
+	}
+	return current.$parent.getComponent(current.$parent, compName);
 }
 
 class Runner {
@@ -328,6 +332,14 @@ class Runner {
 				}
 				domNode.removeAttribute(dynAttr.name);
 			});
+		if (tplNode.textContent.startsWith('{{')) {
+			const tpl = tplNode.textContent.split('{{')[1].split('}}')[0];
+			const res = this.interpolate(tpl);
+			if (domNode.__value != res) {
+				domNode.textContent = res;
+				domNode.__value = res;
+			}
+		}
 	}
 
 	processEvents(tplNode, domParent) {
@@ -418,7 +430,7 @@ class Runner {
 			if (r == 'undefined') r = '';
 			return r;
 		} catch(e) {
-			console.warn('Cant interpolate', tpl, 'in', this, ':', e);
+			console.error('Cant interpolate', tpl, 'in', this, ':', e);
 			return '';
 		}
 	}
