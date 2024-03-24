@@ -349,32 +349,22 @@ class Runner {
 			let methodnameTpl = tplNode.attributes[`@${evName}`].value;
 			const domNode = nodesById(domParent, nodeId(tplNode))[0];
 			let methodname = methodnameTpl;
-			let arg;
+			let args;
 			if (methodnameTpl.includes('(')) {
-				arg = methodnameTpl.split('(')[1].split(')')[0];
+				args = methodnameTpl.split('(')[1].split(')')[0];
+				args = args.split(',').map(arg => this.context[arg.trim()]);
 				methodname = methodnameTpl.split('(')[0];
-				arg = this.context[arg];
 			}
-			if (evName == 'enter') {
-				domNode.removeEventListener('keypress', domNode.__mylistener);
-				const wrapper = (arg) => (ev) => {
-					if (ev.key == 'Enter') {
-						this.c[methodname](ev,arg)
-					}
-				};
-				domNode.__mylistener = wrapper(arg);
-				domNode.addEventListener('keypress', domNode.__mylistener);
-			} else {
-				const wrapper = (arg) => (ev) => {
-					if (typeof this.c[methodname] != 'function') {
-						console.warn('No method', methodname, 'in', this.c);
-					}
-					this.c[methodname](ev,arg)
-				};
-				domNode.removeEventListener(evName, domNode.__mylistener);
-				domNode.__mylistener = wrapper(arg);
-				domNode.addEventListener(evName, domNode.__mylistener);
-			}
+			if (evName == 'enter') evName = 'keypress';
+			const wrapper = (args) => (ev) => {
+				if (typeof this.c[methodname] != 'function') {
+					console.warn('No method', methodname, 'in', this.c);
+				}
+				this.c[methodname](ev, ...args)
+			};
+			domNode.removeEventListener(evName, domNode.__mylistener);
+			domNode.__mylistener = wrapper(args);
+			domNode.addEventListener(evName, domNode.__mylistener);
 		})
 	}
 
